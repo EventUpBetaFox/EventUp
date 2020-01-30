@@ -14,7 +14,7 @@ module.exports = {
     */
     const data = [
       {
-        name: 'Dashboard',
+        name: 'Pending Events',
         url: '/admin',
         icon: 'icon_house_alt',
         createdAt: new Date(),
@@ -30,6 +30,12 @@ module.exports = {
       {
         name: 'Add Event',
         url: '/admin/events/add',
+        icon: 'icon_document_alt',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, {
+        menu: 'Declined Events',
+        url: '/admin/events/decline',
         icon: 'icon_document_alt',
         createdAt: new Date(),
         updatedAt: new Date()

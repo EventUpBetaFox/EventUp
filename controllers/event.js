@@ -9,7 +9,8 @@ class EventController {
     const user = req.session.user
     EventUser.create({
       user_id: user.id,
-      event_id: id
+      event_id: id,
+      status: 'joined'
     })
       .then(result => res.redirect('/events'))
       .catch(err => res.send(err))
@@ -73,7 +74,7 @@ class EventController {
         where: {
           [Op.and]: [
             {
-              is_approved: false
+              is_approved: null
             },
             {
               status: false
@@ -174,9 +175,25 @@ class EventController {
         .then(result => {
           const menus = result[0]
           const categories = result[1]
-          res.render('admin/pages/event-edit', { errors, input: parameters, menus, categories, pages: 'Edit Event' })
+          const user = req.session.user
+          const parseDate = EventHelper.parseDate
+          const status = [
+            {
+              name: 'Open',
+              value: false
+            },
+            {
+              name: 'Closed',
+              value: true
+            }
+          ]
+          parameters.id = id
+          res.render('admin/pages/event-edit', { status, user, min: parseDate(new Date()), parseDate, errors, input: parameters, menus, categories, pages: 'Edit Event' })
         })
-        .catch(err => res.send(err))
+        .catch(err => {
+          console.log(err)
+          res.send(err)
+        })
     } else {
       Event.update(parameters, {
         where: {
@@ -217,7 +234,9 @@ class EventController {
         .then(result => {
           const menus = result[0]
           const categories = result[1]
-          res.render('admin/pages/event-add', { errors, input: parameters, menus, categories, pages: 'Add Event' })
+          const user = req.session.user
+          const parseDate = EventHelper.parseDate
+          res.render('admin/pages/event-add', { errors, user, min: parseDate(new Date()), input: parameters, menus, categories, pages: 'Add Event' })
         })
         .catch(err => res.send(err))
     } else {
@@ -230,6 +249,25 @@ class EventController {
           res.send(err)
         })
     }
+  }
+
+  static approvalEvent(req, res) {
+    const type = req.params.action
+    const id = req.params.eventId
+    let is_approved = false
+    if (type === 'approve') {
+      is_approved = true
+    }
+    const parameters = {
+      is_approved
+    }
+    Event.update(parameters, {
+      where: {
+        id
+      }
+    })
+      .then(result => res.redirect('/admin'))
+      .catch(err => res.send(err))
   }
 }
 
