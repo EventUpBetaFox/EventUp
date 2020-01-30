@@ -1,4 +1,4 @@
-const { User, Category, CategoryUser, Role } = require('../models/index');
+const { User, Category, CategoryUser, Role, Event, EventUser } = require('../models/index');
 const { Op } = require("sequelize");
 var bcrypt = require('bcryptjs');
 
@@ -172,6 +172,37 @@ class UserController {
                 res.render('profile', { user })
             })
             .catch(err => {
+                res.send(err)
+            })
+    }
+    static renderCreateEvent(req, res) {
+        Category.findAll()
+            .then(categories => {
+                res.render('createEvent', { categories })
+            })
+    }
+    static createEvent(req, res) {
+        let input = {
+            name: req.body.name,
+            location: req.body.location,
+            start_date: req.body.start_date,
+            end_date: req.body.end_date,
+            category_id: +req.body.category_id,
+            is_approved: null
+        }
+        Event.create(input)
+            .then(newEvent => {
+                let newEventUser = {
+                    event_id: newEvent.id,
+                    user_id: req.session.user.id
+                }
+                EventUser.create(newEventUser)
+                    .then(_ => {
+                        res.redirect('/events')
+                    })
+            })
+            .catch(err => {
+                console.log(err)
                 res.send(err)
             })
     }
