@@ -1,0 +1,107 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Sign Up</title>
+	</head>
+
+	<body>
+		<form action="/signup" method="POST">
+			<label for="">email</label>
+			<input type="email" name="email"><br>
+			<label for="">username</label>
+			<input type="text" name="username"><br>
+			<label for="">interests</label>
+
+			<% categories.forEach((category) => { %>
+				<input type="checkbox" name="category" value="<%= category.id %>"><%= category.name %>
+			<% }) %>
+			<br>
+			<label for="">password</label>
+			<input type="password" name="password"><br>
+			<input type="submit" value="submit">
+		</form>
+		<% if (error) { %>
+			<p><%= error %></p>
+		<% } %>
+	</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Sign up</title>
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+		<link href="/static/css/elegant-icons-style.css" rel="stylesheet"/>
+		<link href="/static/css/font-awesome.css" rel="stylesheet"/>
+		<link href="/static/css/style.css" rel="stylesheet">
+		<link href="/static/css/style-responsive.css" rel="stylesheet"/>
+	</head>
+
+	<body class="login-img3-body">
+		<div class="container">
+			<form class="login-form" action="/signup" method="POST">
+				<div class="login-wrap">
+					<p class="login-img">
+						<i class="icon_lock_alt"></i>
+					</p>
+					<% if (error) { %>
+						<div class="alert alert-danger"><%= error %></div>
+					<% } %>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="icon_document"></i>
+						</span>
+						<input type="text" required class="form-control" name="first_name" placeholder="Firstname" autofocus>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="icon_document"></i>
+						</span>
+						<input type="text" required class="form-control" name="last_name" placeholder="Lastname" autofocus>
+					</div>
+					<div class="input-group" style="display: flex;">
+						<label class="col-sm-4" style="font-weight:bold;padding-left: 0;">Interest</label>
+						<div>
+							<% categories.forEach((category) => { %>
+								<input type="checkbox" name="category" value="<%= category.id %>">&nbsp;&nbsp;&nbsp;<%= category.name %>
+								<br>
+							<% }) %>
+						</div>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="icon_profile"></i>
+						</span>
+						<input type="text" required class="form-control" name="username" placeholder="Username" autofocus>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="icon_mail"></i>
+						</span>
+						<input type="email" required class="form-control" name="email" placeholder="Email" autofocus>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="icon_key_alt"></i>
+						</span>
+						<input type="password" required name="password" class="form-control" placeholder="Password">
+					</div>
+					<button class="btn btn-primary btn-lg btn-block" type="submit">Signup</button>
+					<a href="/login" class="btn btn-success btn-lg btn-block">Login</a>
+				</div>
+			</form>
+		</div>
+	</body>
+
+</html>
