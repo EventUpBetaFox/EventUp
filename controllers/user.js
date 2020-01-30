@@ -89,6 +89,7 @@ class UserController {
             })
     }
     static renderEdit(req, res) {
+        let error = req.query.err;
         User.findOne({
             where: {
                 id: req.params.id
@@ -98,13 +99,81 @@ class UserController {
             .then(user => {
                 Category.findAll()
                     .then(categories => {
-                        res.render('edit', { categories, user })
+                        res.render('edit', { categories, user, error })
                     })
             })
     }
+    static edit(req, res) {
 
+        User.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+            .then(user => {
+                let update = {
+                    username: req.body.username,
+                    email: req.body.email,
+                    password: user.password
+                }
+                User.update(update, {
+                    where: {
+                        id: req.params.id
+                    }
+                })
+                    .then(_ => {
+                        CategoryUser.destroy({
+                            where: {
+                                user_id: req.params.id
+                            }
+                        })
+                            .then(_ => {
+                                let category = req.body.category;
+                                if (Array.isArray(category)) {
+                                    let bulk = []
+                                    category.forEach(el => {
+                                        let temp = {
+                                            user_id: req.params.id,
+                                            category_id: el
+                                        }
+                                        bulk.push(temp)
+                                    })
+                                    CategoryUser.bulkCreate(bulk)
+                                        .then(_ => {
+                                            res.redirect(`/profile/${req.params.id}`)
+                                        })
+                                } else {
+                                    let newCategoryUser = {
+                                        user_id: req.params.id,
+                                        category_id: req.body.category
+                                    }
+                                    CategoryUser.create(newCategoryUser)
+                                        .then(_ => {
+                                            res.redirect(`/profile/${req.params.id}`)
+                                        })
+                                }
+                            })
+                    })
+                    .catch(err => {
+                        let error = err.errors[0].message;
+                        res.redirect(`/profile/${id}/edit?err=${error}`);
+                    })
+            })
+    }
     static renderProfile(req, res) {
-
+        let id = req.params.id;
+        User.findOne({
+            where: {
+                id: id
+            },
+            include: [Category]
+        })
+            .then(user => {
+                res.render('profile', { user })
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 }
 
