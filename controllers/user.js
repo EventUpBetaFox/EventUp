@@ -194,7 +194,8 @@ class UserController {
             .then(newEvent => {
                 let newEventUser = {
                     event_id: newEvent.id,
-                    user_id: req.session.user.id
+                    user_id: req.session.user.id,
+                    status: 'created'
                 }
                 EventUser.create(newEventUser)
                     .then(_ => {
