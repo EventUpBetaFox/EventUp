@@ -19,7 +19,7 @@
 					<th>Start date</th>
 					<th>End date</th>
 					<th>Category</th>
-					<th>Action</th>
+					<th><%= type === 'joined' ? 'Action' : 'Status' %></th>
 				</tr>
 				<% if (events.length) { %>
 					<% events.forEach((e) => { %>
@@ -34,7 +34,15 @@
 									<% if (type ==='joined') { %>
 										<a class="btn btn-danger" href="/events/cancel/<%= e.Event.id %>">Cancel</a>
 									<% } %>
-									<% if (type === 'created') { %><% } %>
+									<% if (type === 'created') { %>
+										<% if (e.Event.is_approved === null) { %>
+											Review
+										<% } else if (e.Event.is_approved) { %>
+											Approved
+										<% } else { %>
+											Declined
+										<% } %>
+									<% } %>
 								</td>
 							</tr>
 						<% } %>

@@ -304,8 +304,19 @@ class EventController {
       .catch(err => res.send(err))
   }
 
-  static deleteDeclinedEvent(req, res) {
+  static deleteEvent(req, res) {
     const id = +req.params.id
+    const menu = req.params.menu
+
+    let redirectUrl = ''
+    switch (menu) {
+      case 'declined':
+        redirectUrl = '/admin/events/decline'
+        break
+      case 'list':
+        redirectUrl = '/admin/events'
+        break
+    }
 
     EventUser.destroy({
       where: {
@@ -317,7 +328,7 @@ class EventController {
           id
         }
       })
-        .then((result) => res.redirect('/admin/events/decline'))
+        .then((result) => res.redirect(redirectUrl))
         .catch(err => res.send(err))
     })
       .catch(err => res.send(err))
