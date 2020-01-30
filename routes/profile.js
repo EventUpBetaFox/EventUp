@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const UserController = require('../controllers/user')
+const isAuthenticated = require('../middlewares/isAuthenticated')
 
-router.get('/', UserController.renderProfile);
-router.get('/:id/edit', UserController.renderEdit);
+router.get('/', isAuthenticated, UserController.renderProfile);
+router.get('/:id/edit', isAuthenticated, UserController.renderEdit);
 
 module.exports = router;

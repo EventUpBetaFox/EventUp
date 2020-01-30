@@ -1,11 +1,26 @@
-const { Event, Menu, Category } = require('../models')
+const { Event, Menu, Category, User, EventUser } = require('../models')
 const EventHelper = require('../helpers/event')
+const { Op } = require('sequelize')
 
 class EventController {
 
+  static joinEvent(req, res) {
+    const id = +req.params.eventId
+    const user = req.session.user
+    EventUser.create({
+      user_id: user.id,
+      event_id: id
+    })
+      .then(result => res.redirect('/events'))
+      .catch(err => res.send(err))
+  }
+
   static findAllEvents(req, res) {
     Event.findAll({
-      include: [Category],
+      include: [Category, User],
+      where: {
+        is_approved: true
+      },
       order: [
         ['id', 'DESC']
       ]
@@ -13,7 +28,8 @@ class EventController {
       .then(events => {
         const userSession = req.session.user
         const formatDate = EventHelper.formatDate
-        res.render('events', { formatDate, userSession, title: 'Events', keyword: '', events })
+        const isJoined = EventHelper.isJoined
+        res.render('events', { isJoined, formatDate, userSession, title: 'Events', keyword: '', events })
       })
       .catch(err => res.send(err))
   }
@@ -27,6 +43,9 @@ class EventController {
       }),
       Event.findAll({
         include: [Category],
+        where: {
+          is_approved: true
+        },
         order: [
           ['id', 'DESC']
         ]
@@ -36,7 +55,42 @@ class EventController {
         const events = result[1]
         const menus = result[0]
         const formatDate = EventHelper.formatDate
-        res.render('admin/pages/events', { formatDate, menus, events })
+        const user = req.session.user
+        res.render('admin/pages/events', { user, formatDate, menus, events })
+      })
+      .catch(err => res.send(err))
+  }
+
+  static pendingEvents(req, res) {
+    Promise.all([
+      Menu.findAll({
+        order: [
+          ['id', 'ASC']
+        ]
+      }),
+      Event.findAll({
+        include: [Category],
+        where: {
+          [Op.and]: [
+            {
+              is_approved: false
+            },
+            {
+              status: false
+            }
+          ]
+        },
+        order: [
+          ['id', 'DESC']
+        ]
+      })
+    ])
+      .then(result => {
+        const events = result[1]
+        const menus = result[0]
+        const formatDate = EventHelper.formatDate
+        const user = req.session.user
+        res.render('admin/pages/dashboard', { user, formatDate, menus, events })
       })
       .catch(err => res.send(err))
   }
@@ -54,7 +108,8 @@ class EventController {
         const menus = result[0]
         const categories = result[1]
         const parseDate = EventHelper.parseDate
-        res.render('admin/pages/event-add', { min: parseDate(new Date()), errors: '', input: '', menus, categories, pages: 'Add Event' })
+        const user = req.session.user
+        res.render('admin/pages/event-add', { user, min: parseDate(new Date()), errors: '', input: '', menus, categories, pages: 'Add Event' })
       })
       .catch(err => res.send(err))
   }
@@ -89,7 +144,8 @@ class EventController {
             value: true
           }
         ]
-        res.render('admin/pages/event-edit', { status, min: parseDate(new Date()), parseDate, errors: '', input, menus, categories, pages: 'Add Event' })
+        const user = req.session.user
+        res.render('admin/pages/event-edit', { user, status, min: parseDate(new Date()), parseDate, errors: '', input, menus, categories, pages: 'Add Event' })
       })
       .catch(err => res.send(err))
   }

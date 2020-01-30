@@ -1,7 +1,7 @@
-const AdminController = require('./admin')
 const EventController = require('./event')
+const UserController = require('./user')
 
 module.exports = {
-  AdminController,
-  EventController
+  EventController,
+  UserController
 }
