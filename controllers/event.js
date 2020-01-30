@@ -20,7 +20,14 @@ class EventController {
     Event.findAll({
       include: [Category, User],
       where: {
-        is_approved: true
+        [Op.and]: [
+          {
+            is_approved: true
+          },
+          {
+            status: false
+          }
+        ]
       },
       order: [
         ['id', 'DESC']
