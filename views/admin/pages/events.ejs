@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Events</title>
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/bootstrap-theme.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="/static/css/style.css" rel="stylesheet">
+  <link href="/static/css/style-responsive.css" rel="stylesheet" />
+</head>
+
+<body>
+  <section id="container" class="">
+    <%- include('../partials/header.ejs') %>
+    <%- include('../partials/sidebar.ejs') %>
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa-laptop"></i> Events</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+              <li><i class="fa fa-laptop"></i>Events</li>
+            </ol>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                Events
+              </header>
+              <div class="panel-body">
+                <table class="table">
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                  <% if (events.length) { %>
+                  <% events.forEach((event) => { %>
+                  <tr>
+                    <td><%= event.name %></td>
+                    <td><%= event.location %></td>
+                    <td><%= formatDate(event.start_date) %></td>
+                    <td><%= formatDate(event.end_date) %></td>
+                    <td><%= event.Category.name %></td>
+                    <td><%= event.status ? 'Closed' : 'Open' %></td>
+                    <td>
+                      <% if (!event.status) { %>
+                      <a href="/events/edit/<%= event.id %>">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                      </a>&nbsp;
+                      <a href="#">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </a>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% }) %>
+                  <% } else { %>
+                  <tr>
+                    <td colspan="6">Event is not found</td>
+                  </tr>
+                  <% } %>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </section>
+</body>
+
+</html>
