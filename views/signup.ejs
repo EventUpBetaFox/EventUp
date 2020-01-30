@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up</title>
+</head>
+
+<body>
+    <form action="/signup" method="POST">
+        <label for="">email</label>
+        <input type="email" name="email"><br>
+        <label for="">username</label>
+        <input type="text" name="username"><br>
+        <label for="">interests</label>
+
+        <% categories.forEach(category => { %>
+        <input type="checkbox" name="category" value="<%= category.id %>"><%= category.name %>
+        <% }) %>
+        <br>
+        <label for="">password</label>
+        <input type="password" name="password"><br>
+        <input type="submit" value="submit">
+    </form>
+    <% if (error) { %>
+    <p><%= error %></p>
+    <% } %>
+</body>
+
+</html>
