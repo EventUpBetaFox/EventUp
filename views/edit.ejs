@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit</title>
+</head>
+
+<body>
+    <form action="/edit" method="POST">
+        <label for="">email</label>
+        <input type="email" name="email" value="<%= user.email %>"><br>
+        <label for="">username</label>
+        <input type="text" name="username" value="<%= user.username %>"><br>
+        <label for="">interests</label>
+
+        <% categories.forEach(category => { %>
+        <input type="checkbox" name="category" value="<%= category.id %>"
+            <%= user.Categories.filter(el => el.id === category.id).length > 0 ? 'checked' : '' %>><%= category.name %>
+        <% }) %>
+        <br>
+        <a href="/profile/<%= user.id %>/changepassword">change password</a><br>
+        <input type="submit" value="Edit">
+    </form>
+</body>
+
+</html>
