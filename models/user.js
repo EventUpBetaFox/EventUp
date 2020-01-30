@@ -20,9 +20,13 @@ module.exports = (sequelize, DataTypes) => {
               username: value
             }
           })
-            .then(res => {
-              if (res) {
-                next('username sudah terdaftar')
+            .then(user => {
+              if (user) {
+                if (this.username == user.username) {
+                  next()
+                } else {
+                  next('username sudah terdaftar')
+                }
               } else {
                 next()
               }
@@ -48,9 +52,13 @@ module.exports = (sequelize, DataTypes) => {
               email: value
             }
           })
-            .then(res => {
-              if (res) {
-                next('email sudah terdaftar')
+            .then(user => {
+              if (user) {
+                if (this.email == user.email) {
+                  next()
+                } else {
+                  next('email sudah terdaftar')
+                }
               } else {
                 next()
               }
@@ -68,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
         user.password = bcrypt.hashSync(user.password, salt);
       },
       beforeBulkUpdate: (user, options) => {
+        console.log(user)
         user.attributes.password = bcrypt.hashSync(user.attributes.password, salt)
       }
     }, sequelize
