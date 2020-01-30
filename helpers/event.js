@@ -16,6 +16,14 @@ class EventHelper {
     const day = +array[1] < 10 ? `0${array[1]}` : `${array[1]}`
     return `${year}-${month}-${day}`
   }
+
+  static isJoined(users, id) {
+    const filter = users.filter((user) => user.id === id)
+    if (filter.length) {
+      return true
+    }
+    return false
+  }
 }
 
 module.exports = EventHelper

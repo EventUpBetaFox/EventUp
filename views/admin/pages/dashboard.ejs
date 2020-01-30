@@ -35,6 +35,54 @@
             </ol>
           </div>
         </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <section class="panel">
+              <header class="panel-heading">
+                Events
+              </header>
+              <div class="panel-body">
+                <table class="table">
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                  <% if (events.length) { %>
+                  <% events.forEach((event) => { %>
+                  <tr>
+                    <td><%= event.name %></td>
+                    <td><%= event.location %></td>
+                    <td><%= formatDate(event.start_date) %></td>
+                    <td><%= formatDate(event.end_date) %></td>
+                    <td><%= event.Category.name %></td>
+                    <td><%= event.status ? 'Closed' : 'Open' %></td>
+                    <td>
+                      <% if (!event.status) { %>
+                      <a href="/admin/events/approve/<%= event.id %>">
+                        <span class="label label-success">Approve</span>
+                      </a>&nbsp;
+                      <a href="#">
+                        <span class="label label-danger">Decline</span>
+                      </a>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% }) %>
+                  <% } else { %>
+                  <tr>
+                    <td colspan="6">Event is not found</td>
+                  </tr>
+                  <% } %>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
       </section>
     </section>
 </body>
