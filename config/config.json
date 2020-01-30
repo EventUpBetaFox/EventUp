@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "postgres",
-    "password": "12345",
-    "database": "event_up",
+    "password": "abc12345",
+    "database": "event-up",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": 0

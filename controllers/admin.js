@@ -1,10 +1,12 @@
+const { Menu } = require('../models')
+
 class AdminController {
-  static renderAdminLogin(req, res) {
-    res.render('admin/pages/login')
-  }
 
   static renderAdminDashboard(req, res) {
-    res.render('admin/pages/dashboard')
+    Menu.findAll()
+      .then(menus => {
+        res.render('admin/pages/dashboard', { menus })
+      }).catch(err => res.send(err))
   }
 
 }

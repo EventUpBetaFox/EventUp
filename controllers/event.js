@@ -3,6 +3,21 @@ const EventHelper = require('../helpers/event')
 
 class EventController {
 
+  static findAllEvents(req, res) {
+    Event.findAll({
+      include: [Category],
+      order: [
+        ['id', 'DESC']
+      ]
+    })
+      .then(events => {
+        const userSession = req.session.user
+        const formatDate = EventHelper.formatDate
+        res.render('events', { formatDate, userSession, title: 'Events', keyword: '', events })
+      })
+      .catch(err => res.send(err))
+  }
+
   static getAll(req, res) {
     Promise.all([
       Menu.findAll({
@@ -113,7 +128,7 @@ class EventController {
         }
       })
         .then((event) => {
-          res.redirect('/events')
+          res.redirect('/admin/events')
         })
         .catch(err => {
           res.send(err)
@@ -152,7 +167,7 @@ class EventController {
     } else {
       Event.create(parameters)
         .then(event => {
-          res.redirect('/events')
+          res.redirect('/admin/events')
         })
         .catch((err) => {
           console.log(err)

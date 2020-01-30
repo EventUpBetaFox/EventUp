@@ -22,14 +22,14 @@ module.exports = {
       },
       {
         name: 'Events',
-        url: '/events',
+        url: '/admin/events',
         icon: 'icon_table',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: 'Add Event',
-        url: '/events/add',
+        url: '/admin/events/add',
         icon: 'icon_document_alt',
         createdAt: new Date(),
         updatedAt: new Date()
