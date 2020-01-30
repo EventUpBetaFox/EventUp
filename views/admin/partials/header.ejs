@@ -2,12 +2,15 @@
   <a href="/admin" class="logo">Event <span class="lite">Up</span></a>
   <div class="top-nav notification-row">
     <ul class="nav pull-right top-menu">
-      <li class="dropdown">
-        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+      <li style="display:flex;">
+        <a href="#">
           <span class="profile-ava">
             <img alt="" src="/static/img/avatar1_small.jpg">
           </span>
           <span class="username"><%= user.username %></span>
+        </a>
+        <a style="font-size: 13px;" href="/logout">
+          <span>Logout</span>
         </a>
       </li>
     </ul>
