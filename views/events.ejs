@@ -1,0 +1,48 @@
+<html>
+
+<head>
+  <%- include('./partials/head') %>
+</head>
+
+<body>
+  <%- include('./partials/header') %>
+  <div class="container">
+    <br>
+    <h3>Events</h3>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Category</th>
+        <th>Action</th>
+      </tr>
+      <% if (events.length) { %>
+      <% events.forEach((e) => { %>
+      <tr>
+        <td><%= e.name %></td>
+        <td><%= e.location %></td>
+        <td><%= formatDate(e.start_date) %></td>
+        <td><%= formatDate(e.end_date) %></td>
+        <td><%= e.Category.name %></td>
+        <td>
+          <% if (userSession) { %>
+          <a class="btn btn-success" href="/user/join/<%= e.id %>">Join Event</a>
+          <% } else { %>
+          <a class="btn btn-danger" href="/login">Please login first</a>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+      <% } else { %>
+      <tr>
+        <td colspan="6">Event is not found</td>
+      </tr>
+      <% } %>
+    </table>
+  </div>
+  <%- include('./partials/footer') %>
+</body>
+
+</html>

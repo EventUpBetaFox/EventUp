@@ -1,4 +1,4 @@
-const { User, Category, CategoryUser } = require('../models/index');
+const { User, Category, CategoryUser, Role } = require('../models/index');
 const { Op } = require("sequelize");
 var bcrypt = require('bcryptjs');
 
@@ -7,7 +7,8 @@ class UserController {
         let input = {
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            role_id: req.body.role_id
         };
         let category = req.body.category
         User.create(input)
@@ -58,18 +59,30 @@ class UserController {
     }
     static login(req, res) {
         User.findOne({
+            include: [Role],
             where: {
                 [Op.or]: [{ username: req.body.emailOrUsername }, { email: req.body.emailOrUsername }]
             }
         })
             .then(user => {
                 if (bcrypt.compareSync(req.body.password, user.password)) {
-                    res.send('password benar')
+                    req.session.user = {
+                        username: user.username,
+                        role: user.Role.name,
+                        id: user.id,
+                        email: user.email
+                    }
+                    if (user.Role.name === 'User') {
+                        res.redirect('/')
+                    } else {
+                        res.redirect('/admin')
+                    }
                 } else {
                     res.send('password salah')
                 }
             })
             .catch(err => {
+                console.log(err)
                 let error = 'email/username tidak terdaftar'
                 res.redirect(`/login?err=${error}`);
             })

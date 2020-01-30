@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Home</title>
+    <%- include('./partials/head') %>
 </head>
 
 <body>
-    <a href="/login">Login</a>
-    <a href="/signup">Sign Up</a>
+    <%- include('./partials/header') %>
+    <div class="container">
+        <h1>Welcome to Home</h1>
+        <div>Address : 606-3727 Ullamcorper. Street Roseville NH 11523</div>
+        <div>Phone number : (786) 713-8616</div>
+        <br />
+        <a href="/events">See our events</a>
+    </div>
+    <%- include('./partials/footer') %>
 </body>
 
 </html>

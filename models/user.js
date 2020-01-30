@@ -61,11 +61,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    role_id: DataTypes.INTEGER
   }, {
     hooks: {
       beforeCreate: (user, options) => {
         user.password = bcrypt.hashSync(user.password, salt);
+        user.role_id = 1
       },
       beforeBulkUpdate: (user, options) => {
         user.attributes.password = bcrypt.hashSync(user.attributes.password, salt)
@@ -79,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.CategoryUser,
       foreignKey: 'user_id'
     })
+    User.belongsTo(models.Role, { foreignKey: 'role_id' })
   };
   return User;
 };
