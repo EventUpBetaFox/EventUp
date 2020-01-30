@@ -1,0 +1,52 @@
+<html>
+
+	<head>
+		<%- include('../../partials/head') %>
+	</head>
+
+	<body>
+		<%- include('../../partials/header') %>
+		<div class="container">
+			<br>
+			<h3><%= title %></h3>
+			<a href="/events" class="btn btn-link">Back to events</a>
+			<br>
+			<br>
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Start date</th>
+					<th>End date</th>
+					<th>Category</th>
+					<th>Action</th>
+				</tr>
+				<% if (events.length) { %>
+					<% events.forEach((e) => { %>
+						<% if (e.Event) { %>
+							<tr>
+								<td><%= e.Event.name %></td>
+								<td><%= e.Event.location %></td>
+								<td><%= formatDate(new Date(e.Event.start_date)) %></td>
+								<td><%= formatDate( new Date(e.Event.end_date)) %></td>
+								<td><%= e.Event.Category.name %></td>
+								<td>
+									<% if (type ==='joined') { %>
+										<a class="btn btn-danger" href="/events/cancel/<%= e.Event.id %>">Cancel</a>
+									<% } %>
+									<% if (type === 'created') { %><% } %>
+								</td>
+							</tr>
+						<% } %>
+					<% }) %>
+				<% } else { %>
+					<tr>
+						<td colspan="6">Event is not found</td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+		<%- include('../../partials/footer') %>
+	</body>
+
+</html>

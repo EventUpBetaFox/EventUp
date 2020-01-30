@@ -269,6 +269,90 @@ class EventController {
       .then(result => res.redirect('/admin'))
       .catch(err => res.send(err))
   }
+
+  static findDeclinedEvents(req, res) {
+    Promise.all([
+      Menu.findAll({
+        order: [
+          ['id', 'ASC']
+        ]
+      }),
+      Event.findAll({
+        include: [Category],
+        where: {
+          is_approved: false
+        },
+        order: [
+          ['id', 'DESC']
+        ]
+      })
+    ])
+      .then(result => {
+        const events = result[1]
+        const menus = result[0]
+        const formatDate = EventHelper.formatDate
+        const user = req.session.user
+        res.render('admin/pages/declined-events', { user, formatDate, menus, events })
+      })
+      .catch(err => res.send(err))
+  }
+
+  static deleteDeclinedEvent(req, res) {
+    const id = +req.params.id
+
+    EventUser.destroy({
+      where: {
+        event_id: id
+      }
+    }).then((result) => {
+      Event.destroy({
+        where: {
+          id
+        }
+      })
+        .then((result) => res.redirect('/admin/events/decline'))
+        .catch(err => res.send(err))
+    })
+      .catch(err => res.send(err))
+  }
+
+  static findEventByUserId(req, res) {
+    const user = req.session.user
+    const type = req.params.type
+    EventUser.findAll({
+      include: [{
+        model: Event,
+        include: [Category]
+      }],
+      where: {
+        [Op.and]: [
+          {
+            user_id: user.id
+          },
+          {
+            status: type
+          }
+        ]
+      },
+      order: [
+        ['id', 'DESC']
+      ]
+    })
+      .then((events) => {
+        let title = ''
+        if (type === 'joined') {
+          title = 'Joined Events'
+        } else {
+          title = 'Created Events'
+        }
+        const userSession = req.session.user
+        res.render('user/pages/events', { type, formatDate: EventHelper.formatDate, userSession, events, title, keyword: '' })
+      })
+      .catch(err => {
+        res.send(err)
+      })
+  }
+
 }
 
 module.exports = EventController

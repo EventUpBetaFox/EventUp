@@ -8,40 +8,67 @@ class UserController {
             username: req.body.username,
             email: req.body.email,
             password: req.body.password,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
             role_id: req.body.role_id
         };
         let category = req.body.category
-        User.create(input)
-            .then(newUser => {
-                if (Array.isArray(category)) {
-                    let bulk = []
-                    category.forEach(el => {
-                        let temp = {
-                            user_id: newUser.id,
-                            category_id: el
-                        }
-                        bulk.push(temp)
-                    })
-                    CategoryUser.bulkCreate(bulk)
-                        .then(_ => {
-                            res.redirect('/')
-                        })
-                } else {
-                    let newCategoryUser = {
-                        user_id: newUser.id,
-                        category_id: req.body.category
+
+        User.findOne({
+            where: {
+                [Op.or]: [
+                    {
+                        username: input.username
+                    },
+                    {
+                        email: input.email
                     }
-                    CategoryUser.create(newCategoryUser)
-                        .then(_ => {
-                            res.redirect('/')
+                ]
+            }
+        })
+            .then(user => {
+                if (user) {
+                    let error = 'Username or email is already taken'
+                    res.redirect('/signup?err=' + error)
+                } else {
+                    User.create(input)
+                        .then(newUser => {
+                            if (Array.isArray(category)) {
+                                let bulk = []
+                                category.forEach(el => {
+                                    let temp = {
+                                        user_id: newUser.id,
+                                        category_id: el
+                                    }
+                                    bulk.push(temp)
+                                })
+                                CategoryUser.bulkCreate(bulk)
+                                    .then(_ => {
+                                        res.redirect('/')
+                                    })
+                            } else {
+                                let newCategoryUser = {
+                                    user_id: newUser.id,
+                                    category_id: req.body.category
+                                }
+                                CategoryUser.create(newCategoryUser)
+                                    .then(_ => {
+                                        res.redirect('/')
+                                    })
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            let error = err.errors[0].message;
+                            res.redirect(`/signup?err=${error}`);
                         })
                 }
             })
             .catch(err => {
-                console.log(err);
-                let error = err.errors[0].message;
-                res.redirect(`/signup?err=${error}`);
+                res.send(err)
             })
+
+
     }
     static renderSignUpForm(req, res) {
         let error = req.query.err;
@@ -114,7 +141,9 @@ class UserController {
                 let update = {
                     username: req.body.username,
                     email: req.body.email,
-                    password: user.password
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    password: user.password,
                 }
                 User.update(update, {
                     where: {

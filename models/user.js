@@ -70,15 +70,22 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     password: DataTypes.STRING,
-    role_id: DataTypes.INTEGER
+    role_id: DataTypes.INTEGER,
+    first_name: DataTypes.STRING,
+    last_name: DataTypes.STRING,
   }, {
     hooks: {
       beforeCreate: (user, options) => {
+        if (!user.last_name) {
+          user.last_name = user.first_name
+        }
         user.password = bcrypt.hashSync(user.password, salt);
         user.role_id = 1
       },
       beforeBulkUpdate: (user, options) => {
-        console.log(user)
+        if (!user.attributes.last_name) {
+          user.attributes.last_name = user.attributes.first_name
+        }
         user.attributes.password = bcrypt.hashSync(user.attributes.password, salt)
       }
     }, sequelize
