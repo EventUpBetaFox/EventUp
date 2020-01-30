@@ -78,7 +78,8 @@ class UserController {
                         res.redirect('/admin')
                     }
                 } else {
-                    res.send('password salah')
+                    let error = 'Password salah'
+                    res.redirect(`/login?err=${error}`);
                 }
             })
             .catch(err => {

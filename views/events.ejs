@@ -28,7 +28,11 @@
         <td><%= e.Category.name %></td>
         <td>
           <% if (userSession) { %>
-          <a class="btn btn-success" href="/user/join/<%= e.id %>">Join Event</a>
+          <% if (isJoined(e.Users, userSession.id)) { %>
+          <a class="btn">Joined</a>
+          <% } else { %>
+          <a class="btn btn-success" href="/events/join/<%= e.id %>">Join Event</a>
+          <% } %>
           <% } else { %>
           <a class="btn btn-danger" href="/login">Please login first</a>
           <% } %>

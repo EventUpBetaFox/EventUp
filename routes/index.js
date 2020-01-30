@@ -11,6 +11,11 @@ router.use('/profile', routerProfile)
 router.use('/admin', adminRoutes)
 router.use('/events', eventRoutes)
 
+router.get('/logout', (req, res) => {
+    req.session.user = undefined
+    res.redirect('/')
+})
+
 router.get('/', (req, res) => {
     const userSession = req.session.user
     res.render('home', { userSession, title: 'Home', keyword: '' })
