@@ -371,6 +371,25 @@ class EventController {
       })
   }
 
+  static deleteEventUser(req, res) {
+    const id = +req.session.user.id
+    const eventId = req.params.eventId
+    EventUser.destroy({
+      where: {
+        [Op.and]: [
+          {
+            event_id: eventId
+          },
+          {
+            user_id: id
+          }
+        ]
+      }
+    })
+      .then((result) => res.redirect('/profile/events/joined'))
+      .catch(err => res.send(err))
+  }
+
 }
 
 module.exports = EventController

@@ -161,3 +161,7 @@ footer div {
   border-bottom-right-radius: calc(.3rem - 1px);
   border-bottom-left-radius: calc(.3rem - 1px);
 }
+
+.location {
+  width: 40%;
+}

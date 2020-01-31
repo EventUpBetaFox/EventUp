@@ -28,7 +28,7 @@
 					<% events.forEach((e) => { %>
 						<tr>
 							<td><%= e.name %></td>
-							<td><%= e.location %></td>
+							<td class="location"><%= e.location %></td>
 							<td><%= formatDate(e.start_date) %></td>
 							<td><%= formatDate(e.end_date) %></td>
 							<td><%= e.Category.name %></td>

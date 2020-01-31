@@ -26,17 +26,21 @@
 						<% if (e.Event) { %>
 							<tr>
 								<td><%= e.Event.name %></td>
-								<td><%= e.Event.location %></td>
+								<td class="location"><%= e.Event.location %></td>
 								<td><%= formatDate(new Date(e.Event.start_date)) %></td>
 								<td><%= formatDate( new Date(e.Event.end_date)) %></td>
 								<td><%= e.Event.Category.name %></td>
 								<td>
 									<% if (type ==='joined') { %>
-										<a class="btn btn-danger" href="/events/cancel/<%= e.Event.id %>">Cancel</a>
+										<% if (!e.Event.status) { %>
+											<a class="btn btn-danger" href="/events/cancel/<%= e.Event.id %>">Cancel</a>
+										<% } else { %>
+											<span>Closed</span>
+										<% } %>
 									<% } %>
 									<% if (type === 'created') { %>
 										<% if (e.Event.is_approved === null) { %>
-											Review
+											Reviewed
 										<% } else if (e.Event.is_approved) { %>
 											Approved
 										<% } else { %>

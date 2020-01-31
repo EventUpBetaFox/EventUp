@@ -207,8 +207,10 @@ class UserController {
     static renderCreateEvent(req, res) {
         Category.findAll()
             .then(categories => {
-                res.render('createEvent', { categories })
+                const userSession = req.session.user
+                res.render('createEvent', { userSession, categories, title: 'Create Event', keyword: '' })
             })
+            .catch(err => res.send(err))
     }
     static createEvent(req, res) {
         let input = {
