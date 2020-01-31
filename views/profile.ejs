@@ -1,26 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Profile</title>
-</head>
-
-<body>
-    <h1>Profile</h1>
-    <p>Username</p>
-    <p><%= user.username %></p>
-    <p>Email</p>
-    <p><%= user.email %></p>
-    <p>Interest</p>
-    <ul>
-        <% user.Categories.forEach(element => { %>
-        <li><%= element.name %></li>
-        <% }) %>
-    </ul>
-    <a href="/profile/<%= user.id %>/edit">edit</a>
-</body>
-
+<html>
+	<head>
+		<%- include('./partials/head') %>
+	</head>
+	<body>
+		<%- include('./partials/header') %>
+		<div class="container">
+			<h3>Profile</h3>
+			<div class="form-group row">
+				<label class="col-sm-2 control-label">Username:
+				</label>
+				<div class="col-sm-4">
+					<label><%= user.username %></label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 control-label">Email:
+				</label>
+				<div class="col-sm-4">
+					<label><%= user.email %></label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 control-label">Interests:
+				</label>
+				<div class="col-sm-4">
+					<ul>
+						<% user.Categories.forEach((element) => { %>
+							<li><%= element.name %></li>
+						<% }) %>
+					</ul>
+				</div>
+			</div>
+			<a class="btn btn-link" href="/profile/<%= user.id %>/edit">Edit</a>
+		</div>
+		<%- include('./partials/footer') %>
+	</body>
 </html>
