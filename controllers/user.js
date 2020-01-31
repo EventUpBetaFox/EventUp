@@ -1,6 +1,6 @@
 const { User, Category, CategoryUser, Role, Event, EventUser } = require('../models/index');
 const { Op } = require("sequelize");
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 class UserController {
     static createUser(req, res) {
@@ -198,7 +198,8 @@ class UserController {
             include: [Category]
         })
             .then(user => {
-                res.render('profile', { user })
+                const userSession = req.session.user
+                res.render('profile', { userSession, user, title: 'Profile', keyword: '' })
             })
             .catch(err => {
                 res.send(err)
